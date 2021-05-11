@@ -66,7 +66,7 @@ class DLL_EXPORT AdminPairingInfo
 {
 public:
     AdminPairingInfo() { Reset(); }
-    
+
     // Returns a pointer to a Zigbee Cluster Library string where first byte is length
     const uint8_t * GetFabricLabel() const { return mFabricLabel; };
 
@@ -116,7 +116,7 @@ private:
     uint16_t mVendorId = kUndefinedVendorId;
 
     // Zigbee Cluster Library String where first byte is assumed to specify the length of the string.
-    uint8_t mFabricLabel[kFabricLabelMaxLength + 1]; 
+    uint8_t mFabricLabel[kFabricLabelMaxLength + 1];
 
     OperationalCredentials mOpCred;
     AccessControlList mACL;

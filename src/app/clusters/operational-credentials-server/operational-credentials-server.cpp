@@ -86,12 +86,12 @@ EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, c
     fabricDescriptor.FabricId = fabricId;
     fabricDescriptor.NodeId   = nodeId;
     fabricDescriptor.VendorId = vendorId;
-    if (fabricLabel != nullptr) 
+    if (fabricLabel != nullptr)
     {
         uint8_t lengthToStore = emberAfStringLength(fabricLabel);
         fabricDescriptor.Label = ByteSpan(fabricLabel + 1u, lengthToStore > kFabricLabelMaxLength ? kFabricLabelMaxLength : lengthToStore);
     }
-    
+
 
     emberAfPrintln(EMBER_AF_PRINT_DEBUG,
                    "OpCreds: Writing admin into attribute store at index %d: fabricId %" PRIX64 ", nodeId %" PRIX64

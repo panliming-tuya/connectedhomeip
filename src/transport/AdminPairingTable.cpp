@@ -89,7 +89,7 @@ CHIP_ERROR AdminPairingInfo::FetchFromKVS(PersistentStorageDelegate * kvs)
     {
         memcpy(mFabricLabel, info.mFabricLabel , lengthToCopy + 1);  // includes size byte
     }
-   
+
 
     return CHIP_NO_ERROR;
 }
