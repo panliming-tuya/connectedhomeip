@@ -25,12 +25,14 @@
 #include <core/CHIPPersistentStorageDelegate.h>
 #include <support/DLLUtil.h>
 #include <transport/raw/MessageHeader.h>
+#include <lib/core/CHIPSafeCasts.h>
 
 namespace chip {
 namespace Transport {
 
 typedef uint16_t AdminId;
 static constexpr AdminId kUndefinedAdminId = UINT16_MAX;
+static constexpr uint8_t kFabricLabelMaxLength = 32;
 
 // KVS store is sensitive to length of key strings, based on the underlying
 // platform. Keeping them short.
@@ -64,6 +66,12 @@ class DLL_EXPORT AdminPairingInfo
 {
 public:
     AdminPairingInfo() { Reset(); }
+    
+    // Returns a pointer to a Zigbee Cluster Library string where first byte is length
+    const uint8_t * GetFabricLabel() const { return mFabricLabel; };
+
+    // Expects a pointer to a Zigbee Cluster Library string where first byte is assumed to be the length
+    CHIP_ERROR SetFabricLabel(const uint8_t * fabricLabel);
 
     NodeId GetNodeId() const { return mNodeId; }
     void SetNodeId(NodeId nodeId) { mNodeId = nodeId; }
@@ -96,6 +104,7 @@ public:
         mAdmin    = kUndefinedAdminId;
         mFabricId = kUndefinedFabricId;
         mVendorId = kUndefinedVendorId;
+        mFabricLabel[0] = 0xFF; // // The first byte specifies the length of the string
     }
 
     friend class AdminPairingTable;
@@ -105,6 +114,9 @@ private:
     NodeId mNodeId     = kUndefinedNodeId;
     FabricId mFabricId = kUndefinedFabricId;
     uint16_t mVendorId = kUndefinedVendorId;
+
+    // Zigbee Cluster Library String where first byte is assumed to specify the length of the string.
+    uint8_t mFabricLabel[kFabricLabelMaxLength + 1]; 
 
     OperationalCredentials mOpCred;
     AccessControlList mACL;
@@ -123,6 +135,9 @@ private:
         uint64_t mNodeId;   /* This field is serialized in LittleEndian byte order */
         uint64_t mFabricId; /* This field is serialized in LittleEndian byte order */
         uint16_t mVendorId; /* This field is serialized in LittleEndian byte order */
+
+        // Zigbee Cluster Library String where first byte is assumed to specify the length of the string.
+        uint8_t mFabricLabel[kFabricLabelMaxLength + 1];
     };
 };
 
