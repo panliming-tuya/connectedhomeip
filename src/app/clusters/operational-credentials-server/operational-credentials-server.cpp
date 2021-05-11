@@ -301,15 +301,15 @@ bool emberAfOperationalCredentialsClusterUpdateFabricLabelCallback(chip::app::Co
     EmberAfStatus status   = EMBER_ZCL_STATUS_SUCCESS;
     CHIP_ERROR err;
 
-    // Fetch current admin
+    // Fetch current fabric
     AdminPairingInfo * admin = retrieveCurrentAdmin();
     VerifyOrExit(admin != nullptr, status = EMBER_ZCL_STATUS_FAILURE);
 
-    // Set Label on admin
+    // Set Label on fabric
     err = admin->SetFabricLabel(Label);
     VerifyOrExit(err == CHIP_NO_ERROR, status = EMBER_ZCL_STATUS_FAILURE);
 
-    // Perist updated admin
+    // Persist updated fabric
     err = GetGlobalAdminPairingTable().Store(admin->GetAdminId());
     VerifyOrExit(err == CHIP_NO_ERROR, status = EMBER_ZCL_STATUS_FAILURE);
 
