@@ -33,7 +33,8 @@ CHIP_ERROR AdminPairingInfo::SetFabricLabel(const uint8_t * fabricLabel)
     uint8_t lengthToCopy = fabricLabel[0] == 0xFF ? 0 : fabricLabel[0];
     if (lengthToCopy > kFabricLabelMaxLength)
     {
-        ChipLogError(Discovery, "Error setting fabricLabel as its length %d is > than max size %d", lengthToCopy, kFabricLabelMaxLength);
+        ChipLogError(Discovery, "Error setting fabricLabel as its length %d is > than max size %d", lengthToCopy,
+                     kFabricLabelMaxLength);
         return CHIP_ERROR_INVALID_ARGUMENT;
     }
 
@@ -57,7 +58,7 @@ CHIP_ERROR AdminPairingInfo::StoreIntoKVS(PersistentStorageDelegate * kvs)
     uint8_t lengthToCopy = mFabricLabel[0] == 0xFF ? 0 : mFabricLabel[0];
     if (lengthToCopy > 0)
     {
-        memcpy(info.mFabricLabel, mFabricLabel , lengthToCopy + 1); // includes size byte
+        memcpy(info.mFabricLabel, mFabricLabel, lengthToCopy + 1); // includes size byte
     }
 
     err = kvs->SyncSetKeyValue(key, &info, sizeof(info));
@@ -79,17 +80,16 @@ CHIP_ERROR AdminPairingInfo::FetchFromKVS(PersistentStorageDelegate * kvs)
     uint16_t size = sizeof(info);
     ReturnErrorOnFailure(kvs->SyncGetKeyValue(key, &info, size));
 
-    mNodeId    = Encoding::LittleEndian::HostSwap64(info.mNodeId);
-    mAdmin = Encoding::LittleEndian::HostSwap16(info.mAdmin);
-    mFabricId  = Encoding::LittleEndian::HostSwap64(info.mFabricId);
-    mVendorId  = Encoding::LittleEndian::HostSwap16(info.mVendorId);
+    mNodeId   = Encoding::LittleEndian::HostSwap64(info.mNodeId);
+    mAdmin    = Encoding::LittleEndian::HostSwap16(info.mAdmin);
+    mFabricId = Encoding::LittleEndian::HostSwap64(info.mFabricId);
+    mVendorId = Encoding::LittleEndian::HostSwap16(info.mVendorId);
 
     uint8_t lengthToCopy = info.mFabricLabel[0] == 0xFF ? 0 : info.mFabricLabel[0];
     if (lengthToCopy > 0)
     {
-        memcpy(mFabricLabel, info.mFabricLabel , lengthToCopy + 1);  // includes size byte
+        memcpy(mFabricLabel, info.mFabricLabel, lengthToCopy + 1); // includes size byte
     }
-
 
     return CHIP_NO_ERROR;
 }

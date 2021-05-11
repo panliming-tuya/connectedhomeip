@@ -23,15 +23,15 @@
 
 #include <app/util/basic-types.h>
 #include <core/CHIPPersistentStorageDelegate.h>
+#include <lib/core/CHIPSafeCasts.h>
 #include <support/DLLUtil.h>
 #include <transport/raw/MessageHeader.h>
-#include <lib/core/CHIPSafeCasts.h>
 
 namespace chip {
 namespace Transport {
 
 typedef uint16_t AdminId;
-static constexpr AdminId kUndefinedAdminId = UINT16_MAX;
+static constexpr AdminId kUndefinedAdminId     = UINT16_MAX;
 static constexpr uint8_t kFabricLabelMaxLength = 32;
 
 // KVS store is sensitive to length of key strings, based on the underlying
@@ -100,10 +100,10 @@ public:
      */
     void Reset()
     {
-        mNodeId   = kUndefinedNodeId;
-        mAdmin    = kUndefinedAdminId;
-        mFabricId = kUndefinedFabricId;
-        mVendorId = kUndefinedVendorId;
+        mNodeId         = kUndefinedNodeId;
+        mAdmin          = kUndefinedAdminId;
+        mFabricId       = kUndefinedFabricId;
+        mVendorId       = kUndefinedVendorId;
         mFabricLabel[0] = 0xFF; // // The first byte specifies the length of the string
     }
 

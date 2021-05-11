@@ -24,12 +24,12 @@
 #include <app/server/Server.h>
 #include <app/util/af.h>
 #include <app/util/attribute-storage.h>
+#include <lib/core/CHIPSafeCasts.h>
 #include <lib/core/PeerId.h>
 #include <platform/CHIPDeviceLayer.h>
 #include <support/CodeUtils.h>
 #include <support/logging/CHIPLogging.h>
 #include <transport/AdminPairingTable.h>
-#include <lib/core/CHIPSafeCasts.h>
 
 #include "gen/af-structs.h"
 #include "gen/attribute-id.h"
@@ -89,9 +89,9 @@ EmberAfStatus writeFabric(FabricId fabricId, NodeId nodeId, uint16_t vendorId, c
     if (fabricLabel != nullptr)
     {
         uint8_t lengthToStore = emberAfStringLength(fabricLabel);
-        fabricDescriptor.Label = ByteSpan(fabricLabel + 1u, lengthToStore > kFabricLabelMaxLength ? kFabricLabelMaxLength : lengthToStore);
+        fabricDescriptor.Label =
+            ByteSpan(fabricLabel + 1u, lengthToStore > kFabricLabelMaxLength ? kFabricLabelMaxLength : lengthToStore);
     }
-
 
     emberAfPrintln(EMBER_AF_PRINT_DEBUG,
                    "OpCreds: Writing admin into attribute store at index %d: fabricId %" PRIX64 ", nodeId %" PRIX64
@@ -110,9 +110,9 @@ CHIP_ERROR writeAdminsIntoFabricsListAttribute()
     int32_t fabricIndex = 0;
     for (auto & pairing : GetGlobalAdminPairingTable())
     {
-        NodeId nodeId     = pairing.GetNodeId();
-        uint64_t fabricId = pairing.GetFabricId();
-        uint16_t vendorId = pairing.GetVendorId();
+        NodeId nodeId               = pairing.GetNodeId();
+        uint64_t fabricId           = pairing.GetFabricId();
+        uint16_t vendorId           = pairing.GetVendorId();
         const uint8_t * fabricLabel = pairing.GetFabricLabel();
 
         // Skip over uninitialized admins
@@ -298,7 +298,7 @@ bool emberAfOperationalCredentialsClusterUpdateFabricLabelCallback(chip::app::Co
 {
     emberAfPrintln(EMBER_AF_PRINT_DEBUG, "OpCreds: UpdateFabricLabel");
 
-    EmberAfStatus status   = EMBER_ZCL_STATUS_SUCCESS;
+    EmberAfStatus status = EMBER_ZCL_STATUS_SUCCESS;
     CHIP_ERROR err;
 
     // Fetch current fabric
